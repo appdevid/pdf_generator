@@ -98,6 +98,8 @@ app.use(basicAuth);
 // POST /generate  => accept JSON { html: "<...>" }
 app.post("/generate", async (req, res) => {
     const html = req.body.html;
+    const options = req.body.options ?? `--page-size A4 --margin-top 10mm --margin-bottom 10mm --margin-left 10mm --margin-right 10mm`;
+
     if (!html) return res.status(400).send("Missing HTML in body");
 
     const tmpHtml = path.join("/tmp", `input-${Date.now()}.html`);
@@ -106,7 +108,9 @@ app.post("/generate", async (req, res) => {
     try {
         fs.writeFileSync(tmpHtml, html);
 
-        exec(`wkhtmltopdf ${tmpHtml} ${tmpPdf}`, (err, stdout, stderr) => {
+        const command = `wkhtmltopdf ${options} ${tmpHtml} ${tmpPdf}`;
+
+        exec(command, (err, stdout, stderr) => {
             try { fs.unlinkSync(tmpHtml); } catch (e) { }
             if (err) {
                 console.error("wkhtmltopdf error:", err, stderr);
