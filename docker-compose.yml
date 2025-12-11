@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  html2pdf-api:
+    container_name: html2pdf-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./tmp:/tmp
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: node server.js
