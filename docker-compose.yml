@@ -3,7 +3,7 @@ services:
   html2pdf-api:
     container_name: html2pdf-api
     ports:
-      - "3000:3000"
+      - "3020:3020"
     volumes:
       - ./tmp:/tmp
     restart: unless-stopped
